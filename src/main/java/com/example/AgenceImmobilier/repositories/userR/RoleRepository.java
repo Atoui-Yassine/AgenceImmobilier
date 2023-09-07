@@ -1,4 +1,4 @@
-package com.example.AgenceImmobilier.repositories;
+package com.example.AgenceImmobilier.repositories.userR;
 
 import com.example.AgenceImmobilier.models.user.ERole;
 import com.example.AgenceImmobilier.models.user.Role;

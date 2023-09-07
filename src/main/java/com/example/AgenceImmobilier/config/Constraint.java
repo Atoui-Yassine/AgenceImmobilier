@@ -15,7 +15,7 @@ public class Constraint {
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     public final static String PASSWORD_PATTERN = "(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$";
     public final static String PASSWORD_PATTERN_MESSAGE = "Valid passwords must be a mix of upper case, lower case, number/special characters!";
-    public final static int PASSWORD_MIN = 8;
+    public final static int PASSWORD_MIN = 6;
     public final static int PASSWORD_MAX = 20;
 
     /*Firstname Constraints * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * /

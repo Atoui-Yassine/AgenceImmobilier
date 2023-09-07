@@ -1,7 +1,7 @@
 package com.example.AgenceImmobilier.security.services;
 
 import com.example.AgenceImmobilier.models.user.UserModel;
-import com.example.AgenceImmobilier.repositories.UserRepository;
+import com.example.AgenceImmobilier.repositories.userR.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,4 +20,6 @@ public class UserDetailsServiceImpl  implements UserDetailsService {
 
         return UserDetailsImpl.build(user);
     }
+
+
 }

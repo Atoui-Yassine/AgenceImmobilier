@@ -1,9 +1,9 @@
-package com.example.AgenceImmobilier.services;
+package com.example.AgenceImmobilier.services.user;
 
 import com.example.AgenceImmobilier.exceptions.EntityNotFoundException;
 import com.example.AgenceImmobilier.models.user.ERole;
 import com.example.AgenceImmobilier.models.user.Role;
-import com.example.AgenceImmobilier.repositories.RoleRepository;
+import com.example.AgenceImmobilier.repositories.userR.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.example.AgenceImmobilier.repositories;
+package com.example.AgenceImmobilier.repositories.userR;
 
 import com.example.AgenceImmobilier.models.user.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<UserModel,Long> {
     @Query("select u from UserModel u where u.username = ?1 or u.email = ?1")
     Optional<UserModel> findByUsernameOrEmail(String username);
 
+    @Query("select u from UserModel u where u.email = ?1")
+    Optional<UserModel> findByEmail(String email);
 }

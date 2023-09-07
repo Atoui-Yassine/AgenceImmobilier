@@ -6,14 +6,15 @@ import com.example.AgenceImmobilier.DTOs.request.SignupRequest;
 import com.example.AgenceImmobilier.DTOs.response.JwtRefreshResponse;
 import com.example.AgenceImmobilier.DTOs.response.JwtResponse;
 import com.example.AgenceImmobilier.DTOs.response.MessageResponse;
+import com.example.AgenceImmobilier.models.user.AuthProvider;
 import com.example.AgenceImmobilier.models.user.ERole;
 import com.example.AgenceImmobilier.models.user.Role;
 import com.example.AgenceImmobilier.models.user.UserModel;
-import com.example.AgenceImmobilier.repositories.RoleRepository;
+import com.example.AgenceImmobilier.repositories.userR.RoleRepository;
 import com.example.AgenceImmobilier.security.jwt.JwtUtils;
 import com.example.AgenceImmobilier.security.services.UserDetailsImpl;
 import com.example.AgenceImmobilier.security.services.UserDetailsServiceImpl;
-import com.example.AgenceImmobilier.services.UserService;
+import com.example.AgenceImmobilier.services.user.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.validation.Valid;
@@ -130,7 +131,7 @@ public class AuthController {
                 }
             });
         }
-
+        user.setProvider(AuthProvider.local);
         user.setRoles(roles);
         userService.saveUser(user);
 

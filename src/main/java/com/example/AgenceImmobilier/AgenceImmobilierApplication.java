@@ -1,18 +1,22 @@
 package com.example.AgenceImmobilier;
 
+import com.example.AgenceImmobilier.models.user.AuthProvider;
 import com.example.AgenceImmobilier.models.user.ERole;
 import com.example.AgenceImmobilier.models.user.Role;
 import com.example.AgenceImmobilier.models.user.UserModel;
-import com.example.AgenceImmobilier.repositories.RoleRepository;
-import com.example.AgenceImmobilier.repositories.UserRepository;
+import com.example.AgenceImmobilier.repositories.userR.RoleRepository;
+import com.example.AgenceImmobilier.repositories.userR.UserRepository;
+import com.example.AgenceImmobilier.security.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
+@EnableConfigurationProperties(AppProperties.class)
 public class AgenceImmobilierApplication {
 	@Autowired
 	PasswordEncoder encoder;
@@ -36,6 +40,7 @@ public class AgenceImmobilierApplication {
 
 						encoder.encode("password")
 				);
+				user.setProvider(AuthProvider.local);
 				Role userRole = roleRpository.findRoleByName(ERole.ROLE_ADMIN)
 						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
