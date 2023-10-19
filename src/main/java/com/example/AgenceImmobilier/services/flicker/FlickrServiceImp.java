@@ -6,12 +6,12 @@ import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.RequestContext;
 import com.flickr4java.flickr.auth.Auth;
 import com.flickr4java.flickr.auth.Permission;
+import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.uploader.UploadMetaData;
+import com.flickr4java.flickr.uploader.Uploader;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.Imaging;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 
 @Service
-@Slf4j
+
 public class FlickrServiceImp implements FlickrService {
 
     @Value("${flicker.apiKey}")
@@ -40,11 +40,17 @@ public class FlickrServiceImp implements FlickrService {
     public String savePhoto(InputStream photo, String title) {
         connect();
 
+        Uploader uploader = flickr.getUploader();
         UploadMetaData uploadMetaData = new UploadMetaData();
         uploadMetaData.setTitle(title);
 
-        String photoId = flickr.getUploader().upload(photo, uploadMetaData);
-        return flickr.getPhotosInterface().getPhoto(photoId).getMedium640Url();
+        String mediaId = uploader.upload(photo, uploadMetaData);
+
+        // Obtenez l'URL du média uploadé
+        Photo photos = flickr.getPhotosInterface().getPhoto(mediaId);
+        String mediaUrl = photos.getMediumUrl();
+
+        return mediaUrl;
     }
 
     private void connect() throws InterruptedException, ExecutionException, IOException, FlickrException {

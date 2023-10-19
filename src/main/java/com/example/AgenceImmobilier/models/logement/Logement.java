@@ -4,12 +4,14 @@ import com.example.AgenceImmobilier.models.BaseEntity;
 import com.example.AgenceImmobilier.models.booking.Booking;
 import com.example.AgenceImmobilier.models.user.UserModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,6 +59,18 @@ public class Logement  extends BaseEntity{
     /*----Availability Days----*/
     private Date startDate;
     private Date endDate;
+    /*--------Taype-------*/
+    @Enumerated(EnumType.STRING)
+    @Column(length = 25)
+    private TypeLogement type;
+    /*-------Reviews------*/
+    private int numOfReviews;
+    private double averageRating;
+
+    /*--------Media---------*/
+    @JsonManagedReference
+    @OneToMany(mappedBy = "logement" ,fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Media> mediaList;
 
     /*-------Host------*/
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,10 +79,11 @@ public class Logement  extends BaseEntity{
     /*------Booking-----*/
     @OneToMany(mappedBy = "logement", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Booking> bookings;
+    /*------Reviews------*/
+    @OneToMany(mappedBy = "logement", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Review> reviews;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 25)
-    private TypeLogement type;
+
 
 
 

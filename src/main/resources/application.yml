@@ -7,12 +7,20 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    generate-ddl: true
+
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
-
+        show_sql: true
+  logging:
+    level:
+      org:
+        hibernate:
+          SQL: DEBUG
+          type:
+            descriptor:
+              sql: TRACE
 server:
   error:
     include-message: always
@@ -53,3 +61,14 @@ flicker:
   apiSecret: cb98ca30bb2c1b49
   appKey: 72157720891997467-240a7dec52f770ea
   appSecret: 70a4d98a531e3141
+
+  spring:
+    servlet:
+      multipart:
+        max-file-size: 30MB  # Set the maximum allowed file size to 10MB
+        max-request-size: 10MB  # Set the maximum allowed request size to 10MB
+
+  devtools: true
+socket:
+  host: localhost
+  port: 8877

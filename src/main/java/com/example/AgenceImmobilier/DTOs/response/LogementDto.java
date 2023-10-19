@@ -1,12 +1,15 @@
 package com.example.AgenceImmobilier.DTOs.response;
 
+import com.example.AgenceImmobilier.models.logement.Media;
 import com.example.AgenceImmobilier.models.logement.TypeLogement;
 import com.example.AgenceImmobilier.models.user.UserModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -56,5 +59,7 @@ public class LogementDto {
     private int numOfReviews;
     private double averageRating;
     private UserDto host;
-
+    private List<BookingDto> Bookings;
+    private List<Media> mediaList;
+    private List<ReviewDto> reviews;
 }

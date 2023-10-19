@@ -4,12 +4,14 @@ import com.example.AgenceImmobilier.DTOs.request.BookingPost;
 import com.example.AgenceImmobilier.DTOs.request.LogementParameters;
 import com.example.AgenceImmobilier.DTOs.response.BookingDto;
 import com.example.AgenceImmobilier.DTOs.response.LogementDto;
+import com.example.AgenceImmobilier.DTOs.response.ReviewDto;
 import com.example.AgenceImmobilier.DTOs.response.UserPostDto;
 import com.example.AgenceImmobilier.converter.UserConvert;
 import com.example.AgenceImmobilier.models.user.UserModel;
 import com.example.AgenceImmobilier.services.bookingS.BookingService;
 import com.example.AgenceImmobilier.services.flicker.FlickrService;
 import com.example.AgenceImmobilier.services.logementS.LogementService;
+import com.example.AgenceImmobilier.services.logementS.ReviewService;
 import com.example.AgenceImmobilier.services.user.UserService;
 import com.example.AgenceImmobilier.utils.Helpers;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,7 +41,8 @@ public class UserController {
     FlickrService flickrService;
     @Autowired
     BookingService bookingService;
-
+    @Autowired
+    ReviewService reviewService;
     /*-----------logement----------*/
 
     @GetMapping("/logement/{id}")
@@ -177,6 +180,41 @@ public class UserController {
         }
 
     }
+    /*----------------Reviews--------------*/
+    @GetMapping("/reviews")
+    public ResponseEntity<List<ReviewDto>> returnReviews(Principal principal){
+        UserModel user = userService.findByUsername(principal.getName());
+        return ResponseEntity.ok().body(reviewService.findByUser(user.getId()));
+    }
 
+    @PostMapping("/reviews")
+    public ResponseEntity<String> createReview(@RequestBody ReviewDto reviewDto,Principal principal) throws JsonProcessingException {
+        reviewDto.setUserId(userService.findByUsername(principal.getName()).getId());
+        return ResponseEntity.ok().body(Helpers.convertToJson(reviewService.save(reviewDto)));
+    }
+
+    @PutMapping("/reviews/{id}")
+    public ResponseEntity<String> updateReview(@PathVariable("id") Long id, @RequestBody ReviewDto reviewDto,Principal principal ) throws Exception {
+        ReviewDto reviewDto1 = reviewService.findById(id);
+        if (reviewDto1 != null && reviewDto1.getUserId() == userService.findByUsername(principal.getName()).getId()){
+            if (reviewDto.getComment() != null) {
+                reviewDto1.setComment(reviewDto.getComment());
+            }
+            if (reviewDto.getRating() != 0) {
+                reviewDto1.setRating(reviewDto.getRating());
+            }
+
+            return ResponseEntity.ok().body(Helpers.convertToJson(reviewService.save(reviewDto1)));
+        }
+
+        else
+            return ResponseEntity.badRequest().body("{\"Status\": \"Review not found Or not authorized  \"}");
+    }
+
+    @DeleteMapping("/reviews/{id}")
+    public ResponseEntity<String> deleteReviewById(@PathVariable("id") Long id){
+        reviewService.deleteById(id);
+        return ResponseEntity.ok().body("{\"Status\": \"Successful Deletion\"}");
+    }
 
 }

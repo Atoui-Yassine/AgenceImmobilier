@@ -1,12 +1,19 @@
 package com.example.AgenceImmobilier.converter;
 
+import com.example.AgenceImmobilier.DTOs.response.BookingDto;
 import com.example.AgenceImmobilier.DTOs.response.LogementDto;
+import com.example.AgenceImmobilier.DTOs.response.ReviewDto;
+import com.example.AgenceImmobilier.models.booking.Booking;
 import com.example.AgenceImmobilier.models.logement.Logement;
-import com.example.AgenceImmobilier.services.logementS.LogementService;
+import com.example.AgenceImmobilier.models.logement.Media;
+import com.example.AgenceImmobilier.models.logement.Review;
 import com.example.AgenceImmobilier.services.user.UserService;
-import com.example.AgenceImmobilier.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class LogementConverter {
@@ -46,10 +53,10 @@ public class LogementConverter {
         logementDto.setLongitude(logement.getLongitude());
         logementDto.setCountry(logement.getCountry());
         logementDto.setCity(logement.getCity());
-     //   logementDto.setNeighborhood(logement.getNeighborhood());
+
         logementDto.setAddress(logement.getAddress());
         logementDto.setPostalCode(logement.getPostalCode());
-      //  logementDto.setTransportation(logement.getTransportation());
+
 
         logementDto.setMinCost(logement.getMinCost());
         logementDto.setCostPerExtraGuest(logement.getCostPerExtraGuest());
@@ -65,18 +72,18 @@ public class LogementConverter {
         logementDto.setStartDate(logement.getStartDate());
         logementDto.setEndDate(logement.getEndDate());
 
-       // logementDto.setAverageRating(logement.getAverageRating());
-       // logementDto.setNumOfReviews(logement.getNumOfReviews());
+        logementDto.setAverageRating(logement.getAverageRating());
+        logementDto.setNumOfReviews(logement.getNumOfReviews());
 
         logementDto.setHost(UserConvert.convertToDto(logement.getHost()));
 
-       // List<ReviewDto> reviewDtoList = listing.getReviews().stream().map(ReviewConverter::convertToDto).collect(Collectors.toList());
-        //List<BookingDto> bookingDtoList = listing.getBookings().stream().map(BookingConverter::convertToDto).collect(Collectors.toList());
-       // List<ImageDto> imageDtoList = listing.getImages().stream().map(ImageConverter::convertToDto).collect(Collectors.toList());
+        List<ReviewDto> reviewDtoList = logement.getReviews().stream().map(ReviewConverter::convertToDto).collect(Collectors.toList());
+        List<BookingDto> bookingDtoList = logement.getBookings().stream().map(BookingConverter::convertToDto).collect(Collectors.toList());
+        List<Media> imageDtoList = logement.getMediaList().stream().collect(Collectors.toList());
 
-        //listingDto.setReviews(reviewDtoList);
-        //listingDto.setBookings(bookingDtoList);
-        //listingDto.setImages(imageDtoList);
+        logementDto.setReviews(reviewDtoList);
+        logementDto.setBookings(bookingDtoList);
+        logementDto.setMediaList(imageDtoList);
 
         return logementDto;
     }
@@ -107,10 +114,9 @@ public class LogementConverter {
         logement.setLongitude(logementDto.getLongitude());
         logement.setCountry(logementDto.getCountry());
         logement.setCity(logementDto.getCity());
-      //  logement.setNeighborhood(listingDto.getNeighborhood());
+
         logement.setAddress(logementDto.getAddress());
         logement.setPostalCode(logementDto.getPostalCode());
-       // logement.setTransportation(listingDto.getTransportation());
 
         logement.setMinCost(logementDto.getMinCost());
         logement.setCostPerExtraGuest(logementDto.getCostPerExtraGuest());
@@ -125,34 +131,34 @@ public class LogementConverter {
 
         logement.setStartDate(logementDto.getStartDate());
         logement.setEndDate(logementDto.getEndDate());
-
-        //logement.setAverageRating(listingDto.getAverageRating());
-       // logement.setNumOfReviews(listingDto.getNumOfReviews());
+        logement.setMediaList(logementDto.getMediaList());
+        logement.setAverageRating(logementDto.getAverageRating());
+        logement.setNumOfReviews(logementDto.getNumOfReviews());
 
 
         logement.setHost(userServiceStatic.findById(logementDto.getHost().getId()));
 
-       /* if(listingDto.getReviews() == null)
-            listing.setReviews(new ArrayList<Review>());
+       if(logementDto.getReviews() == null)
+            logement.setReviews(new ArrayList<Review>());
         else {
-            List<Review> reviewList = listingDto.getReviews().stream().map(ReviewConverter::convert).collect(Collectors.toList());
-            listing.setReviews(reviewList);
-        }*/
-
-        /*if(listingDto.getBookings() == null)
-            listing.setBookings(new ArrayList<Booking>());
-        else {
-            List<Booking> bookingList = listingDto.getBookings().stream().map(BookingConverter::convert).collect(Collectors.toList());
-            listing.setBookings(bookingList);
-        }*/
-
-       /* if(listingDto.getImages() == null)
-            listing.setImages(new ArrayList<Image>());
-        else {
-            List<Image> imageList = listingDto.getImages().stream().map(ImageConverter::convert).collect(Collectors.toList());
-            listing.setImages(imageList);
+            List<Review> reviewList = logementDto.getReviews().stream().map(ReviewConverter::convert).collect(Collectors.toList());
+            logement.setReviews(reviewList);
         }
-*/
+
+        if(logementDto.getBookings() == null)
+            logement.setBookings(new ArrayList<Booking>());
+        else {
+            List<Booking> bookingList = logementDto.getBookings().stream().map(BookingConverter::convert).collect(Collectors.toList());
+            logement.setBookings(bookingList);
+        }
+
+        if(logementDto.getMediaList() == null)
+            logement.setMediaList(new ArrayList<Media>());
+        else {
+            List<Media> imageList = logementDto.getMediaList().stream().collect(Collectors.toList());
+            logement.setMediaList(imageList);
+        }
+
         return logement;
     }
 }

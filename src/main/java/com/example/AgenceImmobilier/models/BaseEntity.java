@@ -1,5 +1,6 @@
 package com.example.AgenceImmobilier.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,12 +16,13 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @CreationTimestamp
-    private Date createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private LocalDateTime createdAt;
     @UpdateTimestamp
     private Date updatedAt;
     private Boolean enabled=false;

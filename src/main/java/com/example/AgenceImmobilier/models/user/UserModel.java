@@ -2,17 +2,19 @@ package com.example.AgenceImmobilier.models.user;
 
 
 import com.example.AgenceImmobilier.models.BaseEntity;
+import com.example.AgenceImmobilier.models.chat.ChatMessage;
 import com.example.AgenceImmobilier.models.logement.Logement;
+import com.example.AgenceImmobilier.models.logement.Review;
+import com.example.AgenceImmobilier.models.notification.Notification;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+@ToString(exclude = {"reviews"})
 @Entity
 @Data
 @AllArgsConstructor
@@ -32,7 +34,8 @@ public class UserModel extends BaseEntity {
     private String gender;
     private String photoUrl;
     private String coverUrl;
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -43,6 +46,21 @@ public class UserModel extends BaseEntity {
     private AuthProvider provider;
     /*@OneToMany(mappedBy = "host" ,fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Logement> myLogements;*/
+
+    /*-------Review-------*/
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Review> reviews;
+    /*----------chat-----*/
+    @OneToMany(mappedBy = "authorUser", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<ChatMessage> sentMessages = new ArrayList<>();
+    @OneToMany(mappedBy = "recipientUser", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<ChatMessage> receivedMessages  = new ArrayList<>();
+    /*-------notification--------*/
+    @OneToMany(mappedBy = "fromUser", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Notification> sentNotification = new ArrayList<>();
+    @OneToMany(mappedBy = "toUser", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Notification> receivedNotification  = new ArrayList<>();
     public UserModel(String firstname, String lastname, String username, String email, String password) {
 
         this.firstname = firstname;
@@ -57,6 +75,23 @@ public class UserModel extends BaseEntity {
 
         this.email = email;
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", dob=" + dob +
+                ", phone='" + phone + '\'' +
+                ", gender='" + gender + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
+                ", coverUrl='" + coverUrl + '\'' +
+                ", roles=" + roles +
+                ", reviews=" + reviews +
+                '}';
     }
 }
 
